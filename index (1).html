@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zabir Z — ECE Engineer | IoT · Embedded · VLSI · Computer Vision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0D12; --bg-alt:#10141B; --panel:#141922;
+    --line:rgba(255,255,255,0.08); --line-strong:rgba(255,255,255,0.16);
+    --text:#EDEFF3; --text-dim:#9AA3AF;
+    --blue:#4F8CFF; --blue-soft:rgba(79,140,255,0.15); --amber:#FFB454;
+    --radius:6px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--bg); color:var(--text); font-family:'Inter', sans-serif; line-height:1.65; overflow-x:hidden; }
+  ::selection{ background:var(--blue); color:#fff; }
+  a{ color:inherit; text-decoration:none; }
+  h1,h2,h3{ font-family:'Sora', sans-serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  button{ font-family:inherit; cursor:pointer; background:none; border:none; color:inherit; }
+
+  .blob{ position:fixed; border-radius:50%; filter:blur(110px); pointer-events:none; z-index:0; opacity:0.22; }
+  .blob-1{ width:520px; height:520px; background:var(--blue); top:-150px; left:-120px; animation:float1 16s ease-in-out infinite; }
+  .blob-2{ width:460px; height:460px; background:var(--amber); bottom:-180px; right:-140px; animation:float2 18s ease-in-out infinite; }
+  @keyframes float1{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(60px,80px); } }
+  @keyframes float2{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(-70px,-50px); } }
+
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 28px; position:relative; z-index:1; }
+
+  #scrollbar{ position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--blue),var(--amber)); z-index:100; width:0%; transition:width .1s linear; }
+
+  header{ position:sticky; top:0; z-index:50; background:rgba(10,13,18,0.75); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .nav-inner{ max-width:1080px; margin:0 auto; padding:0 28px; display:flex; align-items:center; justify-content:space-between; height:70px; }
+  .logo{ font-family:'Sora',sans-serif; font-weight:700; font-size:17px; letter-spacing:-0.01em; }
+  .logo span{ color:var(--blue); }
+  nav ul{ display:flex; gap:4px; list-style:none; }
+  nav a{ position:relative; font-size:13.5px; font-weight:500; padding:10px 16px; color:var(--text-dim); transition:color .25s ease; }
+  nav a::after{ content:""; position:absolute; left:16px; right:16px; bottom:6px; height:2px; background:var(--blue); transform:scaleX(0); transform-origin:left; transition:transform .3s ease; }
+  nav a:hover, nav a:focus-visible{ color:var(--text); }
+  nav a:hover::after, nav a:focus-visible::after{ transform:scaleX(1); }
+  .nav-toggle{ display:none; }
+  @media (max-width:780px){
+    nav ul{ display:none; }
+    .nav-toggle{ display:block; border:1px solid var(--line); color:var(--text); font-size:12px; letter-spacing:0.05em; padding:7px 14px; border-radius:var(--radius); }
+    nav.open ul{ display:flex; flex-direction:column; position:absolute; top:70px; left:0; right:0; background:var(--bg-alt); border-bottom:1px solid var(--line); padding:8px 28px 20px; gap:4px; }
+  }
+
+  section{ padding:110px 0; position:relative; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--blue); display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .eyebrow::before{ content:""; width:26px; height:1px; background:var(--blue); }
+  h2.section-title{ font-size:clamp(26px,3.6vw,38px); font-weight:700; margin-bottom:50px; letter-spacing:-0.01em; }
+
+  /* HERO */
+  .hero{ padding:96px 0 80px; min-height:92vh; display:flex; align-items:center; }
+  .hero-grid{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:60px; align-items:center; width:100%; }
+  @media (max-width:840px){ .hero-grid{ grid-template-columns:1fr; } .hero-photo-wrap{ order:-1; margin:0 auto; } }
+  .hero-tag{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--text-dim); letter-spacing:0.08em; margin-bottom:22px; display:flex; align-items:center; gap:10px; opacity:0; filter:blur(6px); transform:translateY(14px); animation:rise .9s cubic-bezier(.16,1,.3,1) forwards; }
+  .hero-tag .dot{ width:7px; height:7px; border-radius:50%; background:#5CE07A; box-shadow:0 0 10px #5CE07A; animation:pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
+  .hero h1{ font-size:clamp(38px,6.2vw,62px); font-weight:800; line-height:1.06; letter-spacing:-0.02em; opacity:0; filter:blur(8px); transform:translateY(24px); animation:rise .9s cubic-bezier(.16,1,.3,1) forwards; animation-delay:.1s; }
+  .hero h1 .accent{ background:linear-gradient(100deg,#4F8CFF,#8B5CF6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .typewrap{ margin-top:18px; min-height:32px; opacity:0; filter:blur(6px); transform:translateY(14px); animation:rise .9s cubic-bezier(.16,1,.3,1) forwards; animation-delay:.26s; }
+  .typewrap .mono{ font-size:16px; color:var(--amber); }
+  .cursor-blink{ display:inline-block; width:2px; height:16px; background:var(--amber); margin-left:2px; vertical-align:middle; animation:blink 1s step-end infinite; }
+  @keyframes blink{ 0%,50%{ opacity:1; } 51%,100%{ opacity:0; } }
+  .hero .subtitle{ margin-top:20px; font-size:15.5px; color:var(--text-dim); max-width:520px; opacity:0; filter:blur(6px); transform:translateY(14px); animation:rise .9s cubic-bezier(.16,1,.3,1) forwards; animation-delay:.38s; }
+  @keyframes rise{ to{ opacity:1; filter:blur(0); transform:translateY(0); } }
+  .hero-actions{ margin-top:36px; display:flex; gap:14px; flex-wrap:wrap; opacity:0; filter:blur(6px); transform:translateY(14px); animation:rise .9s cubic-bezier(.16,1,.3,1) forwards; animation-delay:.5s; }
+  .btn{ font-size:13.5px; font-weight:600; padding:13px 24px; border-radius:var(--radius); display:inline-flex; align-items:center; gap:8px; transition:transform .2s ease, box-shadow .2s ease; }
+  .btn-primary{ background:var(--blue); color:#0A0D12; }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 26px -8px rgba(79,140,255,0.55); }
+  .btn-ghost{ border:1px solid var(--line-strong); color:var(--text); }
+  .btn-ghost:hover{ transform:translateY(-2px); border-color:var(--blue); color:var(--blue); }
+  .btn-gradient{
+    border-radius:999px; background:linear-gradient(100deg,#2FD6C0 0%, #4F8CFF 55%, #8B5CF6 100%);
+    background-size:180% 180%; color:#0A0D12; font-weight:700;
+    box-shadow:0 8px 24px -10px rgba(79,140,255,0.55);
+    animation:gradientShift 6s ease infinite;
+  }
+  .btn-gradient:hover{ transform:translateY(-3px) scale(1.02); box-shadow:0 16px 34px -12px rgba(139,92,246,0.6); }
+  .btn-gradient .arrow-ic{ font-size:12px; transition:transform .25s ease; }
+  .btn-gradient:hover .arrow-ic{ transform:translate(3px,-3px); }
+  @keyframes gradientShift{ 0%,100%{ background-position:0% 50%; } 50%{ background-position:100% 50%; } }
+
+  .hero-photo-wrap{ position:relative; width:280px; height:280px; margin-left:auto; opacity:0; filter:blur(10px); transform:scale(0.92); animation:photoRise 1s cubic-bezier(.16,1,.3,1) forwards; animation-delay:.05s; }
+  @keyframes photoRise{ to{ opacity:1; filter:blur(0); transform:scale(1); } }
+  @media (max-width:840px){ .hero-photo-wrap{ width:220px; height:220px; } }
+  .ring{ position:absolute; inset:-14px; border-radius:50%; background:conic-gradient(from 0deg, var(--blue), var(--amber), var(--blue)); animation:spin 10s linear infinite; -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px)); }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .photo-frame{ position:absolute; inset:0; border-radius:50%; overflow:hidden; border:4px solid var(--bg); background:var(--panel); }
+  .photo-frame img{ width:100%; height:100%; object-fit:cover; }
+  .photo-badge{ position:absolute; bottom:6px; right:2px; background:var(--bg-alt); border:1px solid var(--line-strong); border-radius:20px; padding:6px 12px; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--amber); }
+
+  /* ABOUT */
+  .about-text p{ color:var(--text-dim); font-size:15.5px; margin-bottom:16px; max-width:720px; }
+
+  /* QUALIFICATION */
+  .qual-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+  @media (max-width:700px){ .qual-grid{ grid-template-columns:1fr; } }
+  .qual-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:26px 28px; transition:border-color .25s ease, transform .25s ease; }
+  .qual-card:hover{ border-color:var(--blue); transform:translateY(-3px); }
+  .qual-top{ display:flex; justify-content:space-between; gap:10px; margin-bottom:6px; align-items:baseline; }
+  .qual-degree{ font-size:16.5px; font-weight:700; }
+  .qual-year{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--amber); white-space:nowrap; }
+  .qual-inst{ font-size:13.5px; color:var(--text-dim); margin-bottom:10px; }
+  .qual-score{ display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--blue); border:1px solid var(--blue-soft); padding:5px 12px; border-radius:20px; }
+
+  /* SKILLS */
+  #skills{ position:relative; overflow:hidden; }
+  .skills-bg{
+    position:absolute; inset:-20px 0; z-index:0; opacity:0.55;
+    -webkit-mask-image:linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+    mask-image:linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+    pointer-events:none; display:flex; flex-direction:column; justify-content:space-evenly; gap:18px;
+  }
+  .marquee-row{ display:flex; gap:20px; width:max-content; }
+  .marquee-row.dir-l{ animation:marqueeL 42s linear infinite; }
+  .marquee-row.dir-r{ animation:marqueeR 38s linear infinite; }
+  .marquee-row.speed-2{ animation-duration:52s; }
+  .marquee-row.speed-3{ animation-duration:34s; }
+  @keyframes marqueeL{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  @keyframes marqueeR{ from{ transform:translateX(-50%); } to{ transform:translateX(0); } }
+  .logo-chip{
+    display:inline-flex; align-items:center; gap:9px; padding:11px 20px;
+    border:1px solid var(--line); border-radius:11px; background:rgba(255,255,255,0.025);
+    font-family:'Sora',sans-serif; font-weight:700; font-size:14.5px; color:var(--text-dim);
+    white-space:nowrap;
+  }
+  .logo-chip .mono-badge{
+    width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,var(--blue),var(--amber)); color:#0A0D12; font-size:11px; font-weight:800;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .skills-inner{ position:relative; z-index:1; }
+  .skill-groups{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  @media (max-width:700px){ .skill-groups{ grid-template-columns:1fr; } }
+  .skill-group{ background:rgba(20,25,34,0.86); backdrop-filter:blur(6px); border:1px solid var(--line); border-radius:var(--radius); padding:26px 28px; transition:border-color .25s ease, transform .25s ease; }
+  .skill-group:hover{ border-color:var(--blue); transform:translateY(-3px); }
+  .skill-group h3{ font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--amber); margin-bottom:18px; }
+  .pin-list{ display:flex; flex-wrap:wrap; gap:8px; }
+  .pin{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; border:1px solid var(--line-strong); border-radius:20px; padding:6px 13px; color:var(--text-dim); transition:all .2s ease; }
+  .pin:hover{ border-color:var(--blue); color:var(--blue); transform:translateY(-2px); }
+
+  /* PROJECTS */
+  .project-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; }
+  @media (max-width:780px){ .project-grid{ grid-template-columns:1fr; } }
+  .project-card{ position:relative; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:28px 26px 24px; transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease; text-align:left; width:100%; }
+  .project-card:hover{ border-color:var(--blue); transform:translateY(-6px); box-shadow:0 20px 40px -20px rgba(79,140,255,0.35); }
+  .project-id{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-dim); letter-spacing:0.08em; margin-bottom:10px; display:flex; justify-content:space-between; }
+  .project-card h3{ font-size:18.5px; font-weight:700; margin-bottom:10px; }
+  .project-card p{ font-size:14px; color:var(--text-dim); margin-bottom:18px; }
+  .stack-row{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px; }
+  .stack-tag{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--amber); border:1px solid rgba(255,180,84,0.3); padding:3px 9px; border-radius:3px; }
+  .view-more{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--blue); display:inline-flex; align-items:center; gap:6px; }
+  .project-card:hover .view-more{ gap:10px; }
+  .view-more span{ transition:transform .2s ease; }
+  .project-card:hover .view-more span{ transform:translateX(3px); }
+
+  /* IMG PLACEHOLDER */
+  .img-placeholder{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    background:repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 10px, rgba(255,255,255,0.06) 10px 20px);
+    border:1px dashed var(--line-strong); border-radius:var(--radius);
+    color:var(--text-dim); font-family:'IBM Plex Mono', monospace; font-size:11.5px; text-align:center; padding:20px;
+    min-height:140px;
+  }
+  .img-placeholder span{ color:var(--amber); word-break:break-all; }
+
+  /* EXPERIENCE */
+  .timeline{ position:relative; padding-left:34px; }
+  .timeline-track{ position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:rgba(255,255,255,0.1); border-radius:2px; }
+  .timeline-fill{ position:absolute; left:5px; top:6px; width:2px; height:0; border-radius:2px; background:linear-gradient(var(--blue), var(--amber)); box-shadow:0 0 10px var(--blue), 0 0 20px rgba(79,140,255,0.4); transition:height .12s linear; }
+  .t-item{ position:relative; padding-bottom:44px; opacity:0; transform:translateX(-14px); transition:opacity .6s ease, transform .6s ease; }
+  .t-item.in{ opacity:1; transform:translateX(0); }
+  .t-item:last-child{ padding-bottom:0; }
+  .t-dot{ position:absolute; left:-34px; top:4px; width:13px; height:13px; border-radius:50%; background:var(--bg); border:2px solid var(--line-strong); z-index:2; transition:border-color .35s ease, background .35s ease, box-shadow .35s ease, transform .35s ease; }
+  .t-dot.reached{ border-color:var(--blue); background:var(--blue); box-shadow:0 0 10px var(--blue), 0 0 0 5px var(--blue-soft); transform:scale(1.05); }
+  .t-item:hover .t-dot{ box-shadow:0 0 0 5px var(--blue-soft); }
+  .t-head{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+  .t-role{ font-size:16.5px; font-weight:700; }
+  .t-org{ font-size:13.5px; color:var(--text-dim); }
+  .t-date{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--amber); white-space:nowrap; }
+  .t-item ul{ margin-top:8px; padding-left:18px; }
+  .t-item li{ font-size:14px; color:var(--text-dim); margin-bottom:5px; }
+  .edit-flag{ display:inline-block; margin-top:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--amber); border:1px dashed var(--amber); padding:3px 9px; border-radius:3px; }
+  .cert-row{ display:flex; align-items:center; gap:12px; margin-top:14px; }
+  .cert-thumb{ width:76px; height:54px; border-radius:4px; overflow:hidden; flex-shrink:0; cursor:pointer; border:1px solid var(--line-strong); transition:border-color .2s ease, transform .2s ease; }
+  .cert-thumb:hover{ border-color:var(--blue); transform:scale(1.04); }
+  .cert-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .cert-thumb .img-placeholder{ min-height:54px; font-size:8px; padding:4px; gap:2px; }
+  .cert-label{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--blue); }
+
+  /* CERTS / ACHIEVEMENTS accordion */
+  .badge-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  @media (max-width:700px){ .badge-grid{ grid-template-columns:1fr; } }
+  .badge{ border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); overflow:hidden; transition:transform .25s ease, border-color .25s ease; }
+  .badge:hover{ transform:translateY(-3px); border-color:var(--amber); }
+  .badge-head{ width:100%; text-align:left; padding:18px 20px; display:flex; flex-direction:column; }
+  .badge-top{ display:flex; justify-content:space-between; gap:10px; margin-bottom:6px; align-items:center; }
+  .badge-title{ font-size:14.5px; font-weight:700; }
+  .badge-date{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--blue); white-space:nowrap; }
+  .badge-org{ font-size:13px; color:var(--text-dim); margin-bottom:6px; }
+  .badge-desc{ font-size:13px; color:var(--text-dim); }
+  .badge-chevron{ font-size:12px; color:var(--amber); transition:transform .3s ease; margin-left:8px; }
+  .badge.open .badge-chevron{ transform:rotate(180deg); }
+  .badge-more{ max-height:0; overflow:hidden; transition:max-height .4s ease, padding .4s ease; padding:0 20px; }
+  .badge.open .badge-more{ max-height:200px; padding:0 20px 20px; }
+  .badge-more p{ font-size:13px; color:var(--text-dim); border-top:1px solid var(--line); padding-top:12px; }
+
+  /* CONTACT */
+  footer{ border-top:1px solid var(--line); padding:80px 0 44px; }
+  .contact-list{ display:flex; flex-direction:column; gap:14px; margin-bottom:40px; max-width:640px; }
+  .contact-row{
+    display:flex; align-items:center; gap:16px; background:var(--panel);
+    border:1px solid var(--line); border-radius:14px; padding:18px 20px;
+    transition:all .25s ease;
+  }
+  .contact-row:hover{ border-color:var(--blue); background:var(--bg-alt); transform:translateY(-3px); }
+  .contact-icon{
+    width:46px; height:46px; min-width:46px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center; font-size:19px;
+    background:var(--blue-soft); color:var(--blue);
+  }
+  .contact-icon.amber{ background:rgba(255,180,84,0.15); color:var(--amber); }
+  .contact-icon.green{ background:rgba(92,224,122,0.15); color:#5CE07A; }
+  .contact-body{ flex:1; min-width:0; }
+  .contact-k{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
+  .contact-v{ font-size:14.5px; font-weight:600; color:var(--text); word-break:break-word; }
+  .contact-go{ font-size:16px; color:var(--text-dim); transition:transform .25s ease, color .25s ease; }
+  .contact-row:hover .contact-go{ transform:translate(3px,-3px); color:var(--blue); }
+  .avail-dot{ width:9px; height:9px; border-radius:50%; background:#5CE07A; box-shadow:0 0 10px #5CE07A; animation:pulse 1.8s ease-in-out infinite; }
+  .foot-note{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--text-dim); }
+
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* MODAL */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(6,8,11,0.75); backdrop-filter:blur(4px); z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .25s ease; }
+  .modal-overlay.open{ opacity:1; pointer-events:all; }
+  .modal-box{ background:var(--panel); border:1px solid var(--line-strong); border-radius:10px; max-width:640px; width:100%; max-height:85vh; overflow-y:auto; padding:32px; transform:scale(0.94) translateY(12px); transition:transform .3s cubic-bezier(.2,.7,.2,1); }
+  .modal-overlay.open .modal-box{ transform:scale(1) translateY(0); }
+  .modal-close{ float:right; font-size:20px; color:var(--text-dim); line-height:1; padding:4px 8px; border-radius:4px; }
+  .modal-close:hover{ color:var(--text); background:var(--bg-alt); }
+  .modal-id{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-dim); letter-spacing:0.08em; margin-bottom:8px; }
+  .modal-box h3{ font-size:22px; font-weight:700; margin-bottom:14px; clear:both; }
+  .modal-images{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
+  .modal-images img{ width:100%; height:150px; object-fit:cover; border-radius:5px; border:1px solid var(--line); }
+  .modal-images .img-placeholder{ height:150px; }
+  .modal-box p{ font-size:14.5px; color:var(--text-dim); margin-bottom:16px; }
+  .lightbox-overlay{ position:fixed; inset:0; background:rgba(6,8,11,0.9); z-index:250; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .25s ease; }
+  .lightbox-overlay.open{ opacity:1; pointer-events:all; }
+  .lightbox-overlay img{ max-width:90vw; max-height:85vh; border-radius:6px; }
+  .lightbox-overlay .modal-close{ position:fixed; top:20px; right:28px; font-size:28px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .reveal, .t-item{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="scrollbar"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<header>
+  <div class="nav-inner">
+    <div class="logo">ZABIR<span>.</span>Z</div>
+    <nav id="mainNav">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#qualification">Qualification</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#certs">Certifications</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="navToggle">MENU</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-tag"><span class="dot"></span> AVAILABLE FOR INTERNSHIPS &amp; ENTRY-LEVEL ROLES</div>
+        <h1>Hi, I'm Zabir —<br><span class="accent">building the hardware and software</span><br>behind smart systems.</h1>
+        <div class="typewrap"><span class="mono" id="typeTarget"></span><span class="cursor-blink"></span></div>
+        <p class="subtitle">Electronics &amp; Communication Engineering student crafting IoT systems, embedded solutions, Software Development, Computer Vision, 3D CAD Design and real-time monitoring applications — from sensor to signal to decision.</p>
+        <div class="hero-actions">
+
+          <a class="btn btn-gradient" href="#contact">Get in Touch <span class="arrow-ic">↗</span></a>
+          <a class="btn btn-gradient" href="resume.pdf" target="_blank" rel="noopener" download>Download Resume <span class="arrow-ic">↗</span></a>
+        </div>
+      </div>
+      <div class="hero-photo-wrap">
+        <div class="ring"></div>
+        <div class="photo-frame"><img src="zabir.jpg" alt="Zabir Z"></div>
+        <div class="photo-badge">● ECE '27</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="eyebrow">01 / About</div>
+    <h2 class="section-title reveal">Results-driven, hands-on, hardware-first.</h2>
+    <div class="about-text reveal">
+      <p>I'm an Electronics and Communication Engineering student with a strong foundation in Embedded Systems, IoT, Software Development, Computer Vision, and 3D CAD Design. I enjoy building intelligent solutions by integrating hardware and software to solve real-world challenges.</p>
+      <p>I work across the full stack of a hardware idea — from circuit design and sensor integration to firmware and the logic that turns raw signals into decisions. My technical expertise includes Arduino, ESP32, C, C++, Python, OpenCV, sensor integration, embedded firmware development, hardware-software integration, and rapid prototyping. Through academic projects and four internships in Embedded Systems, IoT, VLSI Design, and Web Development, I have gained hands-on experience in developing reliable and innovative engineering solutions.</p>
+      <p>I am passionate about designing smart embedded products and continuously expanding my knowledge in Software Development, Computer Vision, Robotics, IoT, Semiconductor, and VLSI technologies. I am eager to contribute my technical skills, creativity, and problem-solving abilities to impactful engineering projects.</p>
+    </div>
+  </section>
+
+  <!-- QUALIFICATION -->
+  <section id="qualification">
+    <div class="eyebrow">02 / Qualification</div>
+    <h2 class="section-title reveal">Academic background.</h2>
+    <div class="qual-grid reveal">
+      <div class="qual-card">
+        <div class="qual-top">
+          <span class="qual-degree">B.E. — Electronics &amp; Communication Engineering</span>
+          <span class="qual-year">2023 – 2027</span>
+        </div>
+        <div class="qual-inst">Gnanamani College of Technology</div>
+        <span class="qual-score">CGPA · 8.0 / 10</span>
+      </div>
+      <div class="qual-card">
+        <div class="qual-top">
+          <span class="qual-degree">Higher Secondary — Maths &amp; Computer Science</span>
+          <span class="qual-year">2022 – 2023</span>
+        </div>
+        <div class="qual-inst">TN State Board</div>
+        <span class="qual-score">Scored · 75.5%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="skills-bg" aria-hidden="true">
+      <div class="marquee-row dir-l">
+        <span class="logo-chip"><span class="mono-badge">Ar</span>Arduino</span>
+        <span class="logo-chip"><span class="mono-badge">E3</span>ESP32</span>
+        <span class="logo-chip"><span class="mono-badge">Py</span>Python</span>
+        <span class="logo-chip"><span class="mono-badge">Cv</span>OpenCV</span>
+        <span class="logo-chip"><span class="mono-badge">Gh</span>GitHub</span>
+        <span class="logo-chip"><span class="mono-badge">Vs</span>VS Code</span>
+        <span class="logo-chip"><span class="mono-badge">I2</span>I2C</span>
+        <span class="logo-chip"><span class="mono-badge">Ar</span>Arduino</span>
+        <span class="logo-chip"><span class="mono-badge">E3</span>ESP32</span>
+        <span class="logo-chip"><span class="mono-badge">Py</span>Python</span>
+        <span class="logo-chip"><span class="mono-badge">Cv</span>OpenCV</span>
+        <span class="logo-chip"><span class="mono-badge">Gh</span>GitHub</span>
+        <span class="logo-chip"><span class="mono-badge">Vs</span>VS Code</span>
+        <span class="logo-chip"><span class="mono-badge">I2</span>I2C</span>
+      </div>
+      <div class="marquee-row dir-r speed-2">
+        <span class="logo-chip"><span class="mono-badge">C+</span>C / C++</span>
+        <span class="logo-chip"><span class="mono-badge">Mp</span>MediaPipe</span>
+        <span class="logo-chip"><span class="mono-badge">Pr</span>Proteus</span>
+        <span class="logo-chip"><span class="mono-badge">Sn</span>Sensors</span>
+        <span class="logo-chip"><span class="mono-badge">Cd</span>AutoCAD</span>
+        <span class="logo-chip"><span class="mono-badge">Bl</span>Blynk</span>
+        <span class="logo-chip"><span class="mono-badge">Ht</span>HTML</span>
+        <span class="logo-chip"><span class="mono-badge">C+</span>C / C++</span>
+        <span class="logo-chip"><span class="mono-badge">Mp</span>MediaPipe</span>
+        <span class="logo-chip"><span class="mono-badge">Pr</span>Proteus</span>
+        <span class="logo-chip"><span class="mono-badge">Sn</span>Sensors</span>
+        <span class="logo-chip"><span class="mono-badge">Cd</span>AutoCAD</span>
+        <span class="logo-chip"><span class="mono-badge">Bl</span>Blynk</span>
+        <span class="logo-chip"><span class="mono-badge">Ht</span>HTML</span>
+      </div>
+      <div class="marquee-row dir-l speed-3">
+        <span class="logo-chip"><span class="mono-badge">Np</span>NumPy</span>
+        <span class="logo-chip"><span class="mono-badge">Pg</span>PyAutoGUI</span>
+        <span class="logo-chip"><span class="mono-badge">Pc</span>Pycaw</span>
+        <span class="logo-chip"><span class="mono-badge">Ts</span>ThinkSpeak</span>
+        <span class="logo-chip"><span class="mono-badge">Rm</span>Relay Modules</span>
+        <span class="logo-chip"><span class="mono-badge">Wc</span>Webcam</span>
+        <span class="logo-chip"><span class="mono-badge">Ai</span>Arduino IDE</span>
+        <span class="logo-chip"><span class="mono-badge">Np</span>NumPy</span>
+        <span class="logo-chip"><span class="mono-badge">Pg</span>PyAutoGUI</span>
+        <span class="logo-chip"><span class="mono-badge">Pc</span>Pycaw</span>
+        <span class="logo-chip"><span class="mono-badge">Ts</span>ThinkSpeak</span>
+        <span class="logo-chip"><span class="mono-badge">Rm</span>Relay Modules</span>
+        <span class="logo-chip"><span class="mono-badge">Wc</span>Webcam</span>
+        <span class="logo-chip"><span class="mono-badge">Ai</span>Arduino IDE</span>
+      </div>
+      <div class="marquee-row dir-r">
+        <span class="logo-chip"><span class="mono-badge">Io</span>IoT</span>
+        <span class="logo-chip"><span class="mono-badge">Es</span>Embedded Systems</span>
+        <span class="logo-chip"><span class="mono-badge">Vl</span>VLSI Design</span>
+        <span class="logo-chip"><span class="mono-badge">Pc</span>PCB Design</span>
+        <span class="logo-chip"><span class="mono-badge">Cv</span>Computer Vision</span>
+        <span class="logo-chip"><span class="mono-badge">Ai</span>AI</span>
+        <span class="logo-chip"><span class="mono-badge">3d</span>3D CAD</span>
+        <span class="logo-chip"><span class="mono-badge">Io</span>IoT</span>
+        <span class="logo-chip"><span class="mono-badge">Es</span>Embedded Systems</span>
+        <span class="logo-chip"><span class="mono-badge">Vl</span>VLSI Design</span>
+        <span class="logo-chip"><span class="mono-badge">Pc</span>PCB Design</span>
+        <span class="logo-chip"><span class="mono-badge">Cv</span>Computer Vision</span>
+        <span class="logo-chip"><span class="mono-badge">Ai</span>AI</span>
+        <span class="logo-chip"><span class="mono-badge">3d</span>3D CAD</span>
+      </div>
+    </div>
+    <div class="skills-inner">
+    <div class="eyebrow">03 / Skills</div>
+    <h2 class="section-title reveal">Tools of the trade.</h2>
+    <div class="skill-groups reveal">
+      <div class="skill-group">
+        <h3>Core Domains</h3>
+        <div class="pin-list"><span class="pin">Internet of Things</span><span class="pin">Embedded Systems</span><span class="pin">PCB Design</span><span class="pin">VLSI Design</span><span class="pin">3D CAD Design</span><span class="pin">Computer Vision</span><span class="pin">Artificial Intelligence</span><span class="pin">Image Processing</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Languages</h3>
+        <div class="pin-list"><span class="pin">C</span><span class="pin">C++</span><span class="pin">Python</span><span class="pin">HTML</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Hardware</h3>
+        <div class="pin-list"><span class="pin">Arduino</span><span class="pin">ESP32</span><span class="pin">Sensors</span><span class="pin">I2C</span><span class="pin">Relay modules</span><span class="pin">Webcam</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Tools</h3>
+        <div class="pin-list"><span class="pin">OpenCV</span><span class="pin">NumPy</span><span class="pin">MediaPipe</span><span class="pin">PyAutoGUI</span><span class="pin">Pycaw</span><span class="pin">ThinkSpeak</span><span class="pin">Blynk</span><span class="pin">Arduino IDE</span><span class="pin">Proteus</span><span class="pin">VS Code</span><span class="pin">GitHub</span><span class="pin">Adobe Photoshop</span><span class="pin">AutoCAD</span></div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="eyebrow">04 / Projects</div>
+    <h2 class="section-title reveal">Selected builds. <span style="font-size:13px;color:var(--text-dim);font-weight:400;display:block;margin-top:8px;">Click any card to view details &amp; photos.</span></h2>
+    <div class="project-grid">
+
+      <button class="project-card reveal" onclick="openProjectModal('smart-home')">
+        <div class="project-id"><span>MODULE // SMART-HOME</span></div>
+        <h3>Smart Home Automation System (IoT)</h3>
+        <p>IoT-based smart home system using ESP32 and sensors for remote monitoring and control of home appliances.</p>
+        <div class="stack-row"><span class="stack-tag">ESP32</span><span class="stack-tag">Relay</span><span class="stack-tag">Wi-Fi Module</span></div>
+        <div class="view-more">View details <span>→</span></div>
+      </button>
+
+      <button class="project-card reveal" onclick="openProjectModal('health-mon')">
+        <div class="project-id"><span>MODULE // HEALTH-MON</span></div>
+        <h3>AI &amp; IoT Based Healthcare Monitoring System</h3>
+        <p>IoT-enabled healthcare monitoring integrating sensors with AI-based data analysis for real-time vital alerts.</p>
+        <div class="stack-row"><span class="stack-tag">ESP32</span><span class="stack-tag">IoT Sensors</span><span class="stack-tag">Python</span></div>
+        <div class="view-more">View details <span>→</span></div>
+      </button>
+
+      <button class="project-card reveal" onclick="openProjectModal('dist-sense')">
+        <div class="project-id"><span>MODULE // DIST-SENSE</span></div>
+        <h3>Distance Measurement Using Ultrasonic Sensor</h3>
+        <p>Real-time distance measurement with ±1 cm accuracy over 2–400 cm, displayed live on a 16x2 LCD.</p>
+        <div class="stack-row"><span class="stack-tag">Arduino Uno</span><span class="stack-tag">HC-SR04</span><span class="stack-tag">LCD</span></div>
+        <div class="view-more">View details <span>→</span></div>
+      </button>
+
+      <button class="project-card reveal" onclick="openProjectModal('soil-ai')">
+        <div class="project-id"><span>MODULE // SOIL-AI</span></div>
+        <h3>AI-Based Soil Data Communication &amp; Disaster Management</h3>
+        <p>IoT-based soil monitoring with rule-based AI to flag flood and landslide risk for agriculture &amp; disaster prevention.</p>
+        <div class="stack-row"><span class="stack-tag">ESP32</span><span class="stack-tag">Embedded C</span><span class="stack-tag">Rule-Based AI</span></div>
+        <div class="view-more">View details <span>→</span></div>
+      </button>
+
+      <button class="project-card reveal" onclick="openProjectModal('virtual-control-ai')">
+        <div class="project-id"><span>MODULE // VIRTUAL-CONTROL-AI</span></div>
+        <h3>AI Virtual Controller Using Computer Vision</h3>
+        <p>AI Virtual Touchless Computer Controller: Developed a real-time computer vision system using Python, OpenCV, and MediaPipe to control the mouse cursor and system functions through hand gestures.</p>
+        <div class="stack-row"><span class="stack-tag">Python</span><span class="stack-tag">OpenCV</span><span class="stack-tag">MediaPipe</span></div>
+        <div class="view-more">View details <span>→</span></div>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="eyebrow">05 / Experience</div>
+    <h2 class="section-title reveal">Internship timeline.</h2>
+    <div class="timeline" id="timeline">
+      <div class="timeline-track"></div>
+      <div class="timeline-fill" id="timelineFill"></div>
+
+      <div class="t-item">
+        <span class="t-dot"></span>
+        <div class="t-head">
+          <div><div class="t-role">COMPUTER VISION Intern</div><div class="t-org">NSIC — Chennai</div></div>
+          <div class="t-date">Jul 2026 – Jul 2026</div>
+        </div>
+        <ul>
+          <li>Completed hands-on training in Computer Vision using Python and OpenCV.</li>
+          <li>Completed a one-month Computer Vision Internship at NSIC, Chennai, gaining hands-on experience in Python, OpenCV, image processing, object detection, and real-time computer vision application development.</li>
+        </ul>
+        <div class="cert-row">
+          <div class="cert-thumb" onclick="openLightbox('images/projects/certificates/NSIC2.jpeg')">
+            <img src="images/projects/certificates/NSIC2.jpeg" alt="NSIC certificate" onerror="imgFallback(this,'images/projects/certificates/NSIC2.jpeg')">
+          </div>
+          <span class="cert-label">View completion certificate</span>
+        </div>
+      </div>
+      
+      <div class="t-item">
+        <span class="t-dot"></span>
+        <div class="t-head">
+          <div><div class="t-role">Embedded Systems Intern</div><div class="t-org">NSIC — Chennai</div></div>
+          <div class="t-date">Jul 2026 – Jul 2026</div>
+        </div>
+        <ul>
+          <li>Completed hands-on training in Embedded Systems using Arduino and microcontroller-based development.</li>
+          <li>Gained practical experience in embedded C programming, sensor interfacing, and electronic circuit implementation</li>
+        </ul>
+        <div class="cert-row">
+          <div class="cert-thumb" onclick="openLightbox('images/projects/certificates/NSIC.jpeg')">
+            <img src="images/projects/certificates/NSIC.jpeg" alt="NSIC certificate" onerror="imgFallback(this,'images/projects/certificates/NSIC.jpeg')">
+          </div>
+          <span class="cert-label">View completion certificate</span>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-dot"></span>
+        <div class="t-head">
+          <div><div class="t-role">Embedded Systems Intern</div><div class="t-org">UnitedSoftTech — Salem</div></div>
+          <div class="t-date">Dec 2025 – Jan 2026</div>
+        </div>
+        <ul>
+          <li>Worked on embedded system design and development, gaining hands-on experience in microcontrollers, sensors, and circuit interfacing.</li>
+          <li>Implemented basic embedded programming concepts for real-time applications.</li>
+        </ul>
+        <div class="cert-row">
+          <div class="cert-thumb" onclick="openLightbox('images/projects/certificates/unitedsofttech.jpeg')">
+            <img src="images/projects/certificates/unitedsofttech.jpeg" alt="UnitedSoftTech certificate" onerror="imgFallback(this,'images/projects/certificates/unitedsofttech.jpeg')">
+          </div>
+          <span class="cert-label">View completion certificate</span>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-dot"></span>
+        <div class="t-head">
+          <div><div class="t-role">VLSI Design Intern</div><div class="t-org">Smarted Innovation — Bangalore (Online)</div></div>
+          <div class="t-date">Oct 2025 – Dec 2025</div>
+        </div>
+        <ul>
+          <li>Gained practical exposure to VLSI fundamentals including digital logic and CMOS basics.</li>
+          <li>Understood the IC design flow — specification, design, and basic verification.</li>
+        </ul>
+        <div class="cert-row">
+          <div class="cert-thumb" onclick="openLightbox('images/projects/certificates/smarted-innovation.png')">
+            <img src="images/projects/certificates/smarted-innovation.png" alt="Smarted Innovation certificate" onerror="imgFallback(this,'images/projects/certificates/smarted-innovation.png')">
+          </div>
+          <span class="cert-label">View completion certificate</span>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-dot"></span>
+        <div class="t-head">
+          <div><div class="t-role">Internet of Things Intern</div><div class="t-org">Emglitz Technologies — Salem</div></div>
+          <div class="t-date">Jul 2025</div>
+        </div>
+        <ul>
+          <li>Learned and applied IoT fundamentals using Arduino and ESP32, integrating sensors for real-time monitoring applications.</li>
+          <li>Developed basic IoT mini-projects for practical implementation.</li>
+        </ul>
+        <div class="cert-row">
+          <div class="cert-thumb" onclick="openLightbox('images/projects/certificates/emglitz.jpg')">
+            <img src="images/projects/certificates/emglitz.jpg" alt="Emglitz Technologies certificate" onerror="imgFallback(this,'images/projects/certificates/emglitz.jpg')">
+          </div>
+          <span class="cert-label">View completion certificate</span>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-dot"></span>
+        <div class="t-head">
+          <div><div class="t-role">Web Development Intern</div><div class="t-org">Odugaa Tech — Salem</div></div>
+          <div class="t-date">Jan 2025</div>
+        </div>
+        <ul>
+          <li>Gained hands-on exposure to front-end fundamentals — HTML, CSS, and basic responsive layout design.</li>
+        </ul>
+        <div class="cert-row">
+          <div class="cert-thumb" onclick="openLightbox('images/projects/certificates/odugaa.jpeg')">
+            <img src="images/projects/certificates/odugaa.jpeg" alt="Odugaa Tech certificate" onerror="imgFallback(this,'images/projects/certificates/odugaa.jpeg')">
+          </div>
+          <span class="cert-label">View completion certificate</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS & ACHIEVEMENTS -->
+  <section id="certs">
+    <div class="eyebrow">06 / Certifications &amp; Achievements</div>
+    <h2 class="section-title reveal">Learning, on record. <span style="font-size:13px;color:var(--text-dim);font-weight:400;display:block;margin-top:8px;">Click a card to expand.</span></h2>
+    <div class="badge-grid reveal" id="badgeGrid">
+
+      <div class="badge">
+        <button class="badge-head" onclick="toggleBadge(this)">
+          <div class="badge-top"><span class="badge-title">PCB Design Workshop</span><span class="badge-date">Sep 2024 <span class="badge-chevron">▾</span></span></div>
+          <div class="badge-org">IndiGuard Systems Pvt. Ltd. — Gnanamani College of Technology</div>
+          <div class="badge-desc">Hands-on training in PCB design fundamentals.</div>
+        </button>
+        <div class="badge-more"><p>Covered schematic capture, layout planning, and trace routing basics — practical groundwork that feeds directly into hardware prototyping for embedded and IoT builds.</p></div>
+      </div>
+
+      <div class="badge">
+        <button class="badge-head" onclick="toggleBadge(this)">
+          <div class="badge-top"><span class="badge-title">PROCOMPANION Workshop</span><span class="badge-date">Sep 2024 <span class="badge-chevron">▾</span></span></div>
+          <div class="badge-org">NIT — sponsored by Qualcomm</div>
+          <div class="badge-desc">Exposure to advanced technical concepts and hands-on learning.</div>
+        </button>
+        <div class="badge-more"><p>A Qualcomm-backed technical program at NIT, giving direct exposure to industry-grade tools and problem-solving approaches beyond the standard college curriculum.</p></div>
+      </div>
+
+      <div class="badge">
+        <button class="badge-head" onclick="toggleBadge(this)">
+          <div class="badge-top"><span class="badge-title">Generative AI for ECE — Symposium</span><span class="badge-date">Sep 2024 <span class="badge-chevron">▾</span></span></div>
+          <div class="badge-org">KSR Engineering College</div>
+          <div class="badge-desc">Insights into AI-driven innovations in the ECE domain.</div>
+        </button>
+        <div class="badge-more"><p>A National Level Symposium exploring how generative AI is reshaping electronics and communication engineering — from smart sensing to intelligent automation.</p></div>
+      </div>
+
+      <div class="badge">
+        <button class="badge-head" onclick="toggleBadge(this)">
+          <div class="badge-top"><span class="badge-title">i-SYM'26 — IEEE Project Expo</span><span class="badge-date">Mar 2026 <span class="badge-chevron">▾</span></span></div>
+          <div class="badge-org">Hindusthan College of Engineering and Technology</div>
+          <div class="badge-desc">Showcased a technical project; sharpened presentation skills.</div>
+        </button>
+        <div class="badge-more"><p>Presented a working technical project to an IEEE audience of peers and faculty, gaining direct feedback and practice explaining hardware concepts clearly under questioning.</p></div>
+      </div>
+
+      <div class="badge">
+        <button class="badge-head" onclick="toggleBadge(this)">
+          <div class="badge-top"><span class="badge-title">Paper Presentation — 2nd Prize</span><span class="badge-date">Jan 2025 <span class="badge-chevron">▾</span></span></div>
+          <div class="badge-org">AVS Engineering College — Haptic Technology</div>
+          <div class="badge-desc">Demonstrated strong research and technical communication skills.</div>
+        </button>
+        <div class="badge-more"><p>Researched and presented a paper on Haptic Technology at a Technical Symposium, placing 2nd among competing teams for depth of research and clarity of delivery.</p></div>
+      </div>
+
+      <div class="badge">
+        <button class="badge-head" onclick="toggleBadge(this)">
+          <div class="badge-top"><span class="badge-title">Smart India Hackathon</span><span class="badge-date">Sep 2025 <span class="badge-chevron">▾</span></span></div>
+          <div class="badge-org">Government of India — National Hackathon</div>
+          <div class="badge-desc">Collaborated on an IoT-based solution to a real-world problem.</div>
+        </button>
+        <div class="badge-more"><p>Worked in a team under time pressure to design an IoT-based solution for a government-posed problem statement, covering ideation through to a working prototype pitch.</p></div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="eyebrow">07 / Contact</div>
+    <h2 class="section-title reveal">Let's connect.</h2>
+    <div class="contact-list reveal">
+      <a class="contact-row" href="mailto:zabirzamilz@gmail.com">
+        <div class="contact-icon">✉</div>
+        <div class="contact-body"><div class="contact-k">Email Me</div><div class="contact-v">zabirzamilz@gmail.com</div></div>
+        <span class="contact-go">↗</span>
+      </a>
+      <a class="contact-row" href="tel:+919715492474">
+        <div class="contact-icon amber">☎</div>
+        <div class="contact-body"><div class="contact-k">Phone / WhatsApp</div><div class="contact-v">+91 97154 92474</div></div>
+        <span class="contact-go">↗</span>
+      </a>
+      <a class="contact-row" href="https://www.linkedin.com/in/zabir-z-8311602a4?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener">
+        <div class="contact-icon">in</div>
+        <div class="contact-body"><div class="contact-k">LinkedIn</div><div class="contact-v">linkedin.com/in/zabir-z</div></div>
+        <span class="contact-go">↗</span>
+      </a>
+      <a class="contact-row" href="https://github.com/ZabirZ" target="_blank" rel="noopener">
+        <div class="contact-icon">⌥</div>
+        <div class="contact-body"><div class="contact-k">GitHub</div><div class="contact-v">github.com/ZabirZ</div></div>
+        <span class="contact-go">↗</span>
+      </a>
+      <a class="contact-row" href="https://www.google.com/maps/search/?api=1&query=Karur%2C+Tamil+Nadu%2C+India" target="_blank" rel="noopener">
+        <div class="contact-icon green">📍</div>
+        <div class="contact-body"><div class="contact-k">Location</div><div class="contact-v">Karur, Tamil Nadu, India</div></div>
+        <span class="contact-go">↗</span>
+      </a>
+      <div class="contact-row">
+        <div class="contact-icon green">⚡</div>
+        <div class="contact-body"><div class="contact-k">Current Availability</div><div class="contact-v">Open for Internships &amp; Roles</div></div>
+        <span class="avail-dot"></span>
+      </div>
+    </div>
+    <p class="foot-note">© 2026 Zabir Z · Karur, India · Built for embedded systems, IoT &amp; VLSI opportunities</p>
+  </div>
+</footer>
+
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="projectModal" onclick="if(event.target===this) closeProjectModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeProjectModal()">×</button>
+    <div class="modal-id" id="modalId"></div>
+    <h3 id="modalTitle"></h3>
+    <div class="modal-images" id="modalImages"></div>
+    <p id="modalDesc"></p>
+    <div class="stack-row" id="modalStack"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <button class="modal-close" onclick="closeLightbox()">×</button>
+  <img id="lightboxImg" src="" alt="Certificate">
+</div>
+
+<script>
+  // scroll progress bar
+  const scrollbar = document.getElementById('scrollbar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    scrollbar.style.width = pct + '%';
+  });
+
+  // mobile nav
+  const navToggle = document.getElementById('navToggle');
+  const mainNav = document.getElementById('mainNav');
+  navToggle.addEventListener('click', () => mainNav.classList.toggle('open'));
+  mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mainNav.classList.remove('open')));
+
+  // typewriter
+  const roles = ["IoT Systems Builder", "Embedded Firmware Developer", "VLSI Design Enthusiast", "Real-Time Monitoring Engineer"];
+  const typeEl = document.getElementById('typeTarget');
+  let ri = 0, ci = 0, deleting = false;
+  function typeLoop(){
+    const word = roles[ri];
+    if(!deleting){
+      ci++; typeEl.textContent = word.slice(0, ci);
+      if(ci === word.length){ deleting = true; setTimeout(typeLoop, 1400); return; }
+    } else {
+      ci--; typeEl.textContent = word.slice(0, ci);
+      if(ci === 0){ deleting = false; ri = (ri+1) % roles.length; }
+    }
+    setTimeout(typeLoop, deleting ? 40 : 70);
+  }
+  typeLoop();
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // timeline stagger
+  const tItems = document.querySelectorAll('.t-item');
+  const tio = new IntersectionObserver((entries) => {
+    entries.forEach((e,i) => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('in'), i*90); tio.unobserve(e.target); } });
+  }, { threshold: 0.2 });
+  tItems.forEach(el => tio.observe(el));
+
+  // timeline scroll-linked glowing progress line (fills going down, retracts going back up)
+  const timelineEl = document.getElementById('timeline');
+  const timelineFill = document.getElementById('timelineFill');
+  const timelineDots = document.querySelectorAll('.t-dot');
+  function updateTimelineProgress(){
+    if(!timelineEl || !timelineFill) return;
+    const rect = timelineEl.getBoundingClientRect();
+    const refY = window.innerHeight * 0.72;
+    let progress = refY - rect.top;
+    progress = Math.max(0, Math.min(progress, rect.height));
+    timelineFill.style.height = progress + 'px';
+    timelineDots.forEach(dot => {
+      const dotRect = dot.getBoundingClientRect();
+      const dotOffset = (dotRect.top - rect.top) + dotRect.height / 2;
+      dot.classList.toggle('reached', progress >= dotOffset);
+    });
+  }
+  let tlTicking = false;
+  window.addEventListener('scroll', () => {
+    if(!tlTicking){
+      requestAnimationFrame(() => { updateTimelineProgress(); tlTicking = false; });
+      tlTicking = true;
+    }
+  });
+  window.addEventListener('resize', updateTimelineProgress);
+  updateTimelineProgress();
+
+  // image fallback
+  function imgFallback(img, label){
+    const div = document.createElement('div');
+    div.className = 'img-placeholder';
+    div.innerHTML = '📷<br><span>' + label + '</span>';
+    img.replaceWith(div);
+  }
+
+  // achievement accordion
+  function toggleBadge(btn){
+    const badge = btn.closest('.badge');
+    document.querySelectorAll('.badge.open').forEach(b => { if(b !== badge) b.classList.remove('open'); });
+    badge.classList.toggle('open');
+  }
+
+  // project modal data
+  const projects = {
+    'smart-home': {
+      id: 'MODULE // SMART-HOME',
+      title: 'Smart Home Automation System (IoT)',
+      stack: ['ESP32','Relay','Wi-Fi Module','Sensors'],
+      desc: 'Designed and developed an IoT-based smart home system using ESP32 and sensors, enabling remote monitoring and control of home appliances over Wi-Fi. Implemented real-time automation logic — appliances respond to sensor triggers and remote commands — improving convenience and energy efficiency.',
+      images: ['images/projects/smart-home-1.png','images/projects/smart-home-2.jpeg']
+    },
+    'health-mon': {
+      id: 'MODULE // HEALTH-MON',
+      title: 'AI & IoT Based Healthcare Monitoring System',
+      stack: ['ESP32','IoT Sensors','Python'],
+      desc: 'Built an IoT-enabled healthcare monitoring system integrating sensors with AI-based data analysis. Vital parameters such as pulse and temperature are tracked continuously, with real-time alerts raised when readings move outside safe ranges — enhancing early detection and decision support.',
+      images: ['images/projects/health-mon-1.jpeg']
+    },
+    'dist-sense': {
+      id: 'MODULE // DIST-SENSE',
+      title: 'Distance Measurement Using Ultrasonic Sensor',
+      stack: ['Arduino Uno','HC-SR04','LCD Display'],
+      desc: 'Developed a real-time distance measurement system with ±1 cm accuracy over a 2–400 cm range. Live readings are displayed on a 16x2 LCD, with the ultrasonic sensor output calibrated for reliable performance in everyday environmental conditions.',
+      images: ['images/projects/dist-sense-1.jpeg','images/projects/dist-sense-2.jpeg']
+    },
+    'soil-ai': {
+      id: 'MODULE // SOIL-AI',
+      title: 'AI-Based Soil Data Communication & Disaster Management',
+      stack: ['ESP32','Embedded C','Sensors','Rule-Based AI'],
+      desc: 'Developed an IoT-based soil monitoring system that collects real-time environmental data for agriculture and disaster prevention. A rule-based AI layer analyzes soil, rain, and water levels to flag flood and landslide risk early, sending alerts to help prevent damage.',
+      images: ['images/projects/soil-ai-1.jpg','images/projects/soil-ai-2.png']
+    },
+    'virtual-control-ai': {
+      id: 'MODULE // VIRTUAL-CONTROL-AI',
+      title: 'AI Virtual Controller Using Computer Vision',
+      stack: ['Python', 'OpenCV', 'MediaPipe', 'PyAutoGUI', 'Pycaw', 'NumPy', 'screen-brightness-control', 'Computer Vision', 'Gesture Recognition'],
+      desc: 'AI Virtual Touchless Computer Controller: Developed a real-time computer vision system using Python, OpenCV, and MediaPipe to control the mouse cursor and system functions through hand gestures, including cursor movement, left/right click, drag-and-drop, volume, brightness, and screenshot control.',
+      images: ['images/projects/virtual-control-ai-1.png','images/projects/virtual-control-ai-2.png']
+    }
+  };
+
+  const projectModal = document.getElementById('projectModal');
+  function openProjectModal(key){
+    const p = projects[key];
+    document.getElementById('modalId').textContent = p.id;
+    document.getElementById('modalTitle').textContent = p.title;
+    document.getElementById('modalDesc').textContent = p.desc;
+    document.getElementById('modalStack').innerHTML = p.stack.map(s => '<span class="stack-tag">'+s+'</span>').join('');
+    document.getElementById('modalImages').innerHTML = p.images.map(src =>
+      '<img src="'+src+'" alt="'+p.title+'" onerror="imgFallback(this,\''+src+'\')">'
+    ).join('');
+    projectModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeProjectModal(){
+    projectModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // lightbox for certificates
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  function openLightbox(src){
+    lightboxImg.src = src;
+    lightboxImg.onerror = () => { lightboxImg.style.display='none'; };
+    lightboxImg.onload = () => { lightboxImg.style.display='block'; };
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){ closeProjectModal(); closeLightbox(); }
+  });
+</script>
+
+</body>
+</html>
